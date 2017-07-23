@@ -50,6 +50,7 @@ define gluster::volume (
   Optional[Array] $options                    = undef,
   Optional[Integer] $stripe                   = undef,
   Optional[Integer] $replica                  = undef,
+  Optional[Integer] $arbiter                  = undef,
 ) {
 
   if $force {
@@ -193,10 +194,16 @@ define gluster::volume (
           } else {
             $r = ''
           }
+          
+          if $arbiter {
+            $arb = "replica ${arbiter}}"
+          } else {
+            $arb = ''
+          }
 
           $new_bricks_list = join($new_bricks, ' ')
           exec { "gluster add bricks to ${title}":
-            command => "${::gluster_binary} volume add-brick ${title} ${s} ${r} ${new_bricks_list} ${_force}",
+            command => "${::gluster_binary} volume add-brick ${title} ${s} ${r} ${arb} ${new_bricks_list} ${_force}",
           }
 
           if $rebalance {
