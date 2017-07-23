@@ -69,6 +69,10 @@ define gluster::volume (
     $_replica = "replica ${replica}"
   }
 
+  if $arbiter {
+    $_arbiter = "arbiter ${arbiter}"
+  }
+
   $_transport = "transport ${transport}"
 
   if $options {
@@ -80,6 +84,7 @@ define gluster::volume (
   $cmd_args = [
     $_stripe,
     $_replica,
+    $_arbiter,
     $_transport,
     $_bricks,
     $_force,
@@ -203,7 +208,7 @@ define gluster::volume (
 
           $new_bricks_list = join($new_bricks, ' ')
           exec { "gluster add bricks to ${title}":
-            command => "${::gluster_binary} volume add-brick ${title} ${s} ${r} ${arb} ${new_bricks_list} ${_force}",
+            command => "${::gluster_binary} volume add-brick ${title} ${s} ${r} ${new_bricks_list} ${_force}",
           }
 
           if $rebalance {
