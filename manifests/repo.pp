@@ -37,6 +37,7 @@ class gluster::repo (
     'Debian': {
       class { '::gluster::repo::apt':
         version  => $version,
+        release  => $release,
       }
     }
     default: { fail("${::osfamily} not yet supported!") }
